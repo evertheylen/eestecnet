@@ -172,8 +172,9 @@ class JsonInternationalEvents(InternationalEvents):
     def to_json(self, event):
         # serializer.serialize('python', [event]) does some stuff otherwise
         # done manually here, but this is more readable
-        d = {k: getattr(event, k) for k in ['category', 'description', 'slug',
-                    'start_date', 'end_date', 'deadline', 'location', 'scope']}
+        d = {k: getattr(event, k) for k in ['category', 'description', 'slug', 'start_date',
+                    'end_date', 'deadline', 'location', 'scope']}
+        d['thumbnail'] = event.thumbnail.url
         d['organizing_committee'] = event.organizing_committee.get().name
         d['organizers'] = [o.get_full_name() for o in event.organizers.all()]
         return d
