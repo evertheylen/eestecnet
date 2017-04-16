@@ -36,7 +36,7 @@ django-suit-redactor==0.0.2
 djangorestframework==3.0.5
 docutils==0.12
 gunicorn==18.0
-haystack==0.15
+#haystack==0.15
 kombu==3.0.23
 libmagic==1.0
 libsass==0.6.2

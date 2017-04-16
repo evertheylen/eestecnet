@@ -4,8 +4,8 @@ from django.contrib import admin
 from apps.events.views import EventDetail, ApplyToEvent, confirm_event, \
     FillInTransport, UpdateTransport, ChangeDescription, ChangeDetails, EventImages, \
     AddEvents, DeleteApplication, EditApplication, IncomingApplications, CreateEvent, \
-    Participations, InternationalEvents, ExportApplications, ExportParticipants, \
-    ExportFeedback, InternationalProjects
+    Participations, InternationalEvents, JsonInternationalEvents, ExportApplications, \
+    ExportParticipants, ExportFeedback, InternationalProjects
 from apps.feedback.views import NewQuestionset, AnswerFeedback, FillOutQuestionaire
 
 
@@ -14,6 +14,7 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^/?$', InternationalEvents.as_view(), name='events'),
+    url(r'^/list_json?$', JsonInternationalEvents().json_view, name='events_list_json'),
     url(r'^/projects/?$', InternationalProjects.as_view(), name='projects'),
     url(r'^/questionaire/create/?$', NewQuestionset.as_view(), name='newquestionset'),
     url(r'^/add_batch/?$', AddEvents.as_view(), name='batch_add_events'),

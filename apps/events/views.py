@@ -4,12 +4,14 @@ import datetime
 import logging
 
 from django.contrib import messages
+from django.core import serializers
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.forms import widgets
 from django.forms.models import modelform_factory
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
@@ -141,32 +143,49 @@ class InternationalEvents(AdminOptions, Grids, ListView):
         return options
 
     def grids(self):
+        e = self.get_events()
         return [
-            ("events/grids/base.html", self.get_events()['active_list'],
-             "Events Open for Application"),
-            ("events/grids/base.html", self.get_events()['pending_list'],
-             "Events in Progress"),
-            ("events/grids/base.html", self.get_events()['over_list'], "Past Events"),
+            ("events/grids/base.html", e['active_list'], "Events Open for Application"),
+            ("events/grids/base.html", e['pending_list'], "Events in Progress"),
+            ("events/grids/base.html", e['over_list'], "Past Events")
         ]
 
     def get_events(self):
         events = self.get_queryset().filter(scope="international").exclude(category="project")
-        eventlist = {}
-        eventlist['active_list'] = []
-        eventlist['pending_list'] = []
-        eventlist['over_list'] = []
+        eventlist = {
+            'active_list': [],
+            'pending_list': [],
+            'over_list': [],
+        }
         for event in events:
             if event.deadline and event.deadline > timezone.now():
                 eventlist['active_list'].append(event)
             if event.deadline and event.end_date and event.deadline < timezone.now() \
-                    and event.end_date > \
-                            timezone.now().date():
+                    and event.end_date > timezone.now().date():
                 eventlist['pending_list'].append(event)
-            if event.deadline and event.end_date and event.end_date < timezone.now(
-
-            ).date():
+            if event.deadline and event.end_date and event.end_date < timezone.now().date():
                 eventlist['over_list'].append(event)
         return eventlist
+
+
+class JsonInternationalEvents(InternationalEvents):
+    def to_json(self, event):
+        # serializer.serialize('python', [event]) does some stuff otherwise
+        # done manually here, but this is more readable
+        d = {k: getattr(event, k) for k in ['category', 'description', 'slug',
+                    'start_date', 'end_date', 'deadline', 'location', 'scope']}
+        d['organizing_committee'] = event.organizing_committee.get().name
+        d['organizers'] = [o.get_full_name() for o in event.organizers.all()]
+        return d
+
+    def json_view(self, request):
+        """
+        Returns a JSON dict based on the result of get_events. This can be used by
+        other commitments' websites to show info about events on their own websites.
+        """
+        data = {k: [self.to_json(e) for e in events]
+                for k, events in self.get_events().items()}
+        return JsonResponse(data)
 
 
 class InternationalProjects(InternationalEvents):
