@@ -15,7 +15,7 @@ Everything will run inside a virtual machine on your machine, with all dependenc
 vagrant plugin install vagrant-reload
 git clone https://github.com/eestecitt/eestecnet.git
 vagrant up
-
+```
 When it finishes, you should check localhost:8005 for a running instance of eestecnet.
 
 If you encounter any problems then try this sequence of commands:
