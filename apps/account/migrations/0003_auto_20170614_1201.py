@@ -6,6 +6,7 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('auth', '0001_initial'),
         ('teams', '0001_initial'),
@@ -16,14 +17,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='achievement',
             name='member',
-            field=models.ForeignKey(to='teams.Team'),
+            field=models.ForeignKey(blank=True, to='teams.Team', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='achievement',
             name='person',
-            field=models.ForeignKey(related_name=b'achievements',
-                                    to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='achievements', to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -35,23 +35,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eestecer',
             name='groups',
-            field=models.ManyToManyField(related_query_name='user',
-                                         related_name='user_set', to='auth.Group',
-                                         blank=True,
-                                         help_text='The groups this user belongs to. A '
-                                                   'user will get all permissions '
-                                                   'granted to each of his/her group.',
-                                         verbose_name='groups'),
+            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of his/her group.', verbose_name='groups'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='eestecer',
             name='user_permissions',
-            field=models.ManyToManyField(related_query_name='user',
-                                         related_name='user_set', to='auth.Permission',
-                                         blank=True,
-                                         help_text='Specific permissions for this user.',
-                                         verbose_name='user permissions'),
+            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(

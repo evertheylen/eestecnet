@@ -5,6 +5,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
     ]
 
@@ -12,9 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Answer',
             fields=[
-                ('id',
-                 models.AutoField(verbose_name='ID', serialize=False, auto_created=True,
-                                  primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('a', models.TextField(null=True, blank=True)),
             ],
             options={
@@ -24,9 +23,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AnswerSet',
             fields=[
-                ('id',
-                 models.AutoField(verbose_name='ID', serialize=False, auto_created=True,
-                                  primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('filled', models.BooleanField(default=False, editable=False)),
             ],
             options={
             },
@@ -35,9 +33,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('id',
-                 models.AutoField(verbose_name='ID', serialize=False, auto_created=True,
-                                  primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('q', models.TextField()),
             ],
             options={
@@ -47,16 +43,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionSet',
             fields=[
-                ('id',
-                 models.AutoField(verbose_name='ID', serialize=False, auto_created=True,
-                                  primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.TextField(max_length=30)),
-                ('parents',
-                 models.ManyToManyField(related_name='parents_rel_+', editable=False,
-                                        to='feedback.QuestionSet', blank=True,
-                                        help_text=b'Which questionaires do you want to '
-                                                  b'include',
-                                        null=True)),
+                ('official', models.BooleanField(default=False)),
+                ('category', models.CharField(default=b'feedback', max_length=30, choices=[(b'feedback', b'feedback'), (b'questionaire', b'questionaire')])),
+                ('parents', models.ManyToManyField(related_name='parents_rel_+', editable=False, to='feedback.QuestionSet', blank=True, help_text=b'Which questionaires do you want to include', null=True)),
             ],
             options={
             },
