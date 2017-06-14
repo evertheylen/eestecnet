@@ -19,10 +19,12 @@ vagrant up
 When it finishes, you should check localhost:8005 for a running instance of eestecnet.
 
 If you encounter any problems then try this sequence of commands:
-```vagrant ssh
+```
+vagrant ssh
 cd /vagrant/
 sudo service supervisor stop
 sudo killall python
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py runserver 0.0.0.0:8000```
+python manage.py runserver 0.0.0.0:8000
+```
