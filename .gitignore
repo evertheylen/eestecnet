@@ -9,6 +9,7 @@ tmp
 media
 *.log
 .idea
+.vagrant
 serve
 whoosh_index
 static/doc
