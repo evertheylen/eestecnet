@@ -6,9 +6,11 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('events', '0001_initial'),
+        ('feedback', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('teams', '0001_initial'),
     ]
 
@@ -21,22 +23,26 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='event',
-            name='participants',
-            field=models.ManyToManyField(related_name=b'events',
-                                         through='events.Participation',
-                                         to=settings.AUTH_USER_MODEL),
+            name='questionaire',
+            field=models.ForeignKey(related_name='eventstwo', blank=True, to='feedback.QuestionSet', help_text=b'Optional: If you want your participants to answer more questions other than writing about their motivation, you can include it here', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application',
             name='applicant',
-            field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='application',
+            name='questionaire',
+            field=models.OneToOneField(null=True, blank=True, to='feedback.AnswerSet'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application',
             name='target',
-            field=models.ForeignKey(editable=False, to='events.Event'),
+            field=models.ForeignKey(to='events.Event'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(

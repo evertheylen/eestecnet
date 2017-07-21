@@ -6,6 +6,7 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('teams', '0001_initial'),
@@ -16,13 +17,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='membership',
             name='team',
-            field=models.ForeignKey(editable=False, to='teams.Team'),
+            field=models.ForeignKey(to='teams.Team'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='membership',
             name='user',
-            field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
